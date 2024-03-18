@@ -227,4 +227,44 @@ public class ArticleQueryServiceTest extends DbTestBase {
     ArticleData articleData = anotherUserFeed.getArticleDatas().get(0);
     Assertions.assertTrue(articleData.getProfileData().isFollowing());
   }
+
+    @Test
+    void whenValidSlugAndValidUser_ThenFindBySlug_ShouldReturnArticleData() {
+
+      Optional<ArticleData> optional = queryService.findBySlug(article.getSlug(), user);
+      Assertions.assertTrue(optional.isPresent());
+      ArticleData fetched = optional.get();
+
+      Assertions.assertEquals(fetched.getFavoritesCount(), 0);
+      Assertions.assertFalse(fetched.isFavorited());
+      Assertions.assertNotNull(fetched.getCreatedAt());
+      Assertions.assertNotNull(fetched.getUpdatedAt());
+      Assertions.assertTrue(fetched.getTagList().contains("java"));
+    }
+
+    @Test
+    void whenValidSlugAndNullUser_ThenFindBySlug_ShouldReturnArticleData() {
+        Optional<ArticleData> optional = queryService.findBySlug(article.getSlug(), null);
+        Assertions.assertTrue(optional.isPresent());
+        ArticleData fetched = optional.get();
+
+        int expectedFavoritesCount = 0;
+        boolean expectedFavorited = false;
+        boolean expectedContainsJava = true;
+
+        Assertions.assertEquals(expectedFavoritesCount, fetched.getFavoritesCount());
+        Assertions.assertEquals(expectedFavorited, fetched.isFavorited());
+        Assertions.assertNotNull(fetched.getCreatedAt());
+        Assertions.assertNotNull(fetched.getUpdatedAt());
+        Assertions.assertEquals(expectedContainsJava, fetched.getTagList().contains("java"));
+    }
+
+    @Test
+    void whenInvalidSlugAndValidUser_ThenFindBySlug_ShouldReturnEmpty() {
+      String invalidSlug = "invalid-slug";
+
+      Optional<ArticleData> optional = queryService.findBySlug(invalidSlug, user);
+
+      Assertions.assertTrue(optional.isEmpty());
+    }
 }
