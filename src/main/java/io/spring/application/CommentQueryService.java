@@ -31,47 +31,25 @@ public class CommentQueryService {
               userRelationshipQueryService.isUserFollowing(
                   user.getId(), commentData.getProfileData().getId()));
     }
-    return Optional.ofNullable(commentData);
+    return Optional.of(commentData);
   }
 
   public List<CommentData> findByArticleId(String articleId, User user) {
     List<CommentData> comments = commentReadService.findByArticleId(articleId);
-    if (comments.size() > 0 && user != null) {
-      Set<String> followingAuthors =
-          userRelationshipQueryService.followingAuthors(
-              user.getId(),
-              comments.stream()
-                  .map(commentData -> commentData.getProfileData().getId())
-                  .collect(Collectors.toList()));
-      comments.forEach(
-          commentData -> {
-            if (followingAuthors.contains(commentData.getProfileData().getId())) {
-              commentData.getProfileData().setFollowing(true);
-            }
-          });
+    if (!comments.isEmpty() && user != null) {
+      setFollowingStatus(comments, user);
     }
     return comments;
   }
 
   public CursorPager<CommentData> findByArticleIdWithCursor(
-      String articleId, User user, CursorPageParameter<DateTime> page) {
+          String articleId, User user, CursorPageParameter<DateTime> page) {
     List<CommentData> comments = commentReadService.findByArticleIdWithCursor(articleId, page);
     if (comments.isEmpty()) {
       return new CursorPager<>(new ArrayList<>(), page.getDirection(), false);
     }
     if (user != null) {
-      Set<String> followingAuthors =
-          userRelationshipQueryService.followingAuthors(
-              user.getId(),
-              comments.stream()
-                  .map(commentData -> commentData.getProfileData().getId())
-                  .collect(Collectors.toList()));
-      comments.forEach(
-          commentData -> {
-            if (followingAuthors.contains(commentData.getProfileData().getId())) {
-              commentData.getProfileData().setFollowing(true);
-            }
-          });
+      setFollowingStatus(comments, user);
     }
     boolean hasExtra = comments.size() > page.getLimit();
     if (hasExtra) {
@@ -81,5 +59,20 @@ public class CommentQueryService {
       Collections.reverse(comments);
     }
     return new CursorPager<>(comments, page.getDirection(), hasExtra);
+  }
+
+  private void setFollowingStatus(List<CommentData> comments, User user) {
+    Set<String> followingAuthors =
+            userRelationshipQueryService.followingAuthors(
+                    user.getId(),
+                    comments.stream()
+                            .map(commentData -> commentData.getProfileData().getId())
+                            .collect(Collectors.toList()));
+    comments.forEach(
+            commentData -> {
+              if (followingAuthors.contains(commentData.getProfileData().getId())) {
+                commentData.getProfileData().setFollowing(true);
+              }
+            });
   }
 }
