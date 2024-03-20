@@ -4,11 +4,14 @@ import io.spring.application.ArticleQueryService;
 import io.spring.application.Page;
 import io.spring.application.article.ArticleCommandService;
 import io.spring.application.article.NewArticleParam;
+import io.spring.application.data.ArticleData;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,17 +28,19 @@ public class ArticlesApi {
   private ArticleCommandService articleCommandService;
   private ArticleQueryService articleQueryService;
 
-  @PostMapping
-  public ResponseEntity createArticle(
-      @Valid @RequestBody NewArticleParam newArticleParam, @AuthenticationPrincipal User user) {
-    Article article = articleCommandService.createArticle(newArticleParam, user);
-    return ResponseEntity.ok(
-        new HashMap<String, Object>() {
-          {
-            put("article", articleQueryService.findById(article.getId(), user).get());
-          }
-        });
+@PostMapping
+public ResponseEntity createArticle(
+    @Valid @RequestBody NewArticleParam newArticleParam, @AuthenticationPrincipal User user) {
+  Article article = articleCommandService.createArticle(newArticleParam, user);
+  Optional<ArticleData> optionalArticle = articleQueryService.findById(article.getId(), user);
+
+  if (optionalArticle.isPresent()) {
+    var response = Map.of("article", optionalArticle.get());
+    return ResponseEntity.ok(response);
+  } else {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Article not found");
   }
+}
 
   @GetMapping(path = "feed")
   public ResponseEntity getFeed(
