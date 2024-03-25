@@ -20,6 +20,13 @@ public class CommentQueryService {
   private CommentReadService commentReadService;
   private UserRelationshipQueryService userRelationshipQueryService;
 
+  /**
+   * Finds a comment by its ID and associates it with the given user.
+   *
+   * @param id   The ID of the comment to find.
+   * @param user The user associated with the comment.
+   * @return An Optional containing the CommentData if found, or an empty Optional if not found.
+   */
   public Optional<CommentData> findById(String id, User user) {
     CommentData commentData = commentReadService.findById(id);
     if (commentData == null) {
@@ -34,6 +41,13 @@ public class CommentQueryService {
     return Optional.ofNullable(commentData);
   }
 
+  /**
+   * Retrieves a list of comments for a given article ID and updates the following status of the user for each comment.
+   *
+   * @param articleId The ID of the article.
+   * @param user      The user performing the operation.
+   * @return The list of CommentData objects.
+   */
   public List<CommentData> findByArticleId(String articleId, User user) {
     List<CommentData> comments = commentReadService.findByArticleId(articleId);
     if (comments.size() > 0 && user != null) {
@@ -53,6 +67,14 @@ public class CommentQueryService {
     return comments;
   }
 
+  /**
+   * Retrieves a paginated list of comments for a given article ID and updates the following status of the user for each comment.
+   *
+   * @param articleId The ID of the article.
+   * @param user      The user performing the operation.
+   * @param page      The cursor page parameter.
+   * @return A CursorPager containing the list of CommentData objects and pagination information.
+   */
   public CursorPager<CommentData> findByArticleIdWithCursor(
       String articleId, User user, CursorPageParameter<DateTime> page) {
     List<CommentData> comments = commentReadService.findByArticleIdWithCursor(articleId, page);
