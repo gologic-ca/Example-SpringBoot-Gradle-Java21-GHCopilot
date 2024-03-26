@@ -2,6 +2,9 @@ package io.spring.infrastructure.mybatis.mapper;
 
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,6 +17,8 @@ public interface UserMapper {
   User findByEmail(@Param("email") String email);
 
   User findById(@Param("id") String id);
+
+  List<User> findAll();
 
   void update(@Param("user") User user);
 

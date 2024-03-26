@@ -7,6 +7,7 @@ import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,12 @@ public class ProfileApi {
         .findByUsername(username, user)
         .map(this::profileResponse)
         .orElseThrow(ResourceNotFoundException::new);
+  }
+
+  @GetMapping("all")
+  public ResponseEntity getAllProfiles(@AuthenticationPrincipal User user) {
+    List<ProfileData> profiles = profileQueryService.findAllProfiles(user);
+    return profilesResponse(profiles);
   }
 
   @PostMapping(path = "follow")
@@ -72,6 +79,15 @@ public class ProfileApi {
         new HashMap<String, Object>() {
           {
             put("profile", profile);
+          }
+        });
+  }
+
+  private ResponseEntity profilesResponse(List<ProfileData> profiles) {
+    return ResponseEntity.ok(
+        new HashMap<String, Object>() {
+          {
+            put("profiles", profiles);
           }
         });
   }

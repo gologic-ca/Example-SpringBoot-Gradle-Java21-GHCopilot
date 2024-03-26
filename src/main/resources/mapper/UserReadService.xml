@@ -7,4 +7,7 @@
     <select id="findById" resultType="io.spring.application.data.UserData">
         select * from users where id = #{id}
     </select>
+    <select id="findAll" resultType="io.spring.application.data.UserData">
+        SELECT * FROM users
+    </select>
 </mapper>

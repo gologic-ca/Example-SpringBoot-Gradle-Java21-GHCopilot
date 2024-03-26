@@ -34,6 +34,9 @@
     <select id="findByEmail" resultMap="user">
         select id, username, email, password, bio, image from users where email = #{email}
     </select>
+    <select id="findAll" resultMap="user">
+        SELECT * FROM users
+    </select>
     <select id="findById" resultMap="user">
         select id, username, email, password, bio, image from users where id = #{id}
     </select>
