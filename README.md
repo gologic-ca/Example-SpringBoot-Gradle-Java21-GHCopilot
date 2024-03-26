@@ -79,3 +79,42 @@ Use spotless for code format.
 # Help
 
 Please fork and PR to improve the project.
+
+# Memaid
+classDiagram
+    class users {
+        +id String
+        +username String
+        +password String
+        +email String
+        +bio String
+        +image String
+    }
+    class articles {
+        +id String
+        +user_id String
+        +slug String
+        +title String
+        +description String
+        +body String
+        +created_at Timestamp
+        +updated_at Timestamp
+    }
+    class tags {
+        +id String
+        +name String
+    }
+    class comments {
+        +id String
+        +body String
+        +article_id String
+        +user_id String
+        +created_at Timestamp
+        +updated_at Timestamp
+    }
+    users "1" -- "0..*" articles : writes
+    users "1" -- "0..*" articles : favorites
+    users "1" -- "0..*" users : follows
+    users "1" -- "0..*" comments : comments
+    articles "1" -- "0..*" comments : has
+    articles "1" -- "0..*" tags : has
