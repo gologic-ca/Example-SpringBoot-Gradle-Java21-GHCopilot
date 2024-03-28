@@ -1,10 +1,20 @@
 package io.spring.api;
 
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.*;
+import static org.hamcrest.core.IsEqual.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
@@ -13,14 +23,6 @@ import io.spring.application.ProfileQueryService;
 import io.spring.application.data.ProfileData;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ProfileApi.class)
 @Import({WebSecurityConfig.class, JacksonCustomizations.class})

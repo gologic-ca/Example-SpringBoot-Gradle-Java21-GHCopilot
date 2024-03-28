@@ -1,14 +1,15 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.3'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
     id "com.netflix.dgs.codegen" version "5.0.6"
-    id "com.diffplug.spotless" version "6.2.1"
+    id "com.diffplug.spotless" version "6.25.0"
+    id("org.openrewrite.rewrite") version("6.10.0")
 }
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-targetCompatibility = '11'
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 spotless {
     java {
@@ -20,6 +21,8 @@ spotless {
     }
 }
 
+
+
 repositories {
     mavenCentral()
 }
@@ -30,30 +33,40 @@ configurations {
     }
 }
 
+rewrite {
+ activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2")
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:4.9.21'
+    implementation 'org.codehaus.groovy:groovy-all:2.4.15'
     implementation 'org.flywaydb:flyway-core'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation "jakarta.validation:jakarta.validation-api:3.0.2"
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2',
                 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     implementation 'joda-time:joda-time:2.10.13'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-    testImplementation 'io.rest-assured:rest-assured:4.5.1'
-    testImplementation 'io.rest-assured:json-path:4.5.1'
-    testImplementation 'io.rest-assured:xml-path:4.5.1'
-    testImplementation 'io.rest-assured:spring-mock-mvc:4.5.1'
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation 'io.rest-assured:json-path:5.4.0'
+    testImplementation 'io.rest-assured:xml-path:5.4.0'
+    testImplementation "org.hamcrest:hamcrest:2.2"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testImplementation "org.mockito:mockito-junit-jupiter:3.12.4"
+    testImplementation 'io.rest-assured:spring-mock-mvc:5.4.0'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+    rewrite("org.openrewrite.recipe:rewrite-spring:5.7.0")
 }
 
 tasks.named('test') {
@@ -69,4 +82,10 @@ tasks.named('clean') {
 tasks.named('generateJava') {
     schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
     packageName = 'io.spring.graphql' // The package name to use to generate sources
+}
+
+tasks.named('spotlessJava') {
+    mustRunAfter tasks.named('compileJava')
+    mustRunAfter tasks.named('generateJava')
+    mustRunAfter tasks.named('processResources')
 }

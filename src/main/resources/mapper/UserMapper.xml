@@ -37,6 +37,7 @@
     <select id="findById" resultMap="user">
         select id, username, email, password, bio, image from users where id = #{id}
     </select>
+    
     <select id="findRelation" resultMap="follow">
         SELECT
           F.user_id followUserId,

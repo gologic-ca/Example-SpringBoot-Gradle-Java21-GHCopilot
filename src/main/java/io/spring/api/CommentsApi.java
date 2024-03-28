@@ -11,22 +11,22 @@ import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,7 +39,7 @@ public class CommentsApi {
 
   @PostMapping
   public ResponseEntity<?> createComment(
-      @PathVariable("slug") String slug,
+      @PathVariable String slug,
       @AuthenticationPrincipal User user,
       @Valid @RequestBody NewCommentParam newCommentParam) {
     Article article =
@@ -51,8 +51,7 @@ public class CommentsApi {
   }
 
   @GetMapping
-  public ResponseEntity getComments(
-      @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
+  public ResponseEntity getComments(@PathVariable String slug, @AuthenticationPrincipal User user) {
     Article article =
         articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
     List<CommentData> comments = commentQueryService.findByArticleId(article.getId(), user);
@@ -64,9 +63,9 @@ public class CommentsApi {
         });
   }
 
-  @RequestMapping(path = "{id}", method = RequestMethod.DELETE)
+  @DeleteMapping("{id}")
   public ResponseEntity deleteComment(
-      @PathVariable("slug") String slug,
+      @PathVariable String slug,
       @PathVariable("id") String commentId,
       @AuthenticationPrincipal User user) {
     Article article =

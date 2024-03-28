@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Optional;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,6 @@ public class DefaultJwtService implements JwtService {
   private final SignatureAlgorithm signatureAlgorithm;
   private int sessionTime;
 
-  @Autowired
   public DefaultJwtService(
       @Value("${jwt.secret}") String secret, @Value("${jwt.sessionTime}") int sessionTime) {
     this.sessionTime = sessionTime;
