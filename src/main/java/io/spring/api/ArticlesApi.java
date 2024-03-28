@@ -1,15 +1,9 @@
 package io.spring.api;
 
-import io.spring.application.ArticleQueryService;
-import io.spring.application.Page;
-import io.spring.application.article.ArticleCommandService;
-import io.spring.application.article.NewArticleParam;
-import io.spring.core.article.Article;
-import io.spring.core.user.User;
-import jakarta.validation.Valid;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.AllArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.spring.Util;
+import io.spring.application.ArticleQueryService;
+import io.spring.application.Page;
+import io.spring.application.article.ArticleCommandService;
+import io.spring.application.article.NewArticleParam;
+import io.spring.core.article.Article;
+import io.spring.core.user.User;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping(path = "/articles")
@@ -35,8 +39,14 @@ public class ArticlesApi {
     return ResponseEntity.ok(response);
   }
 
+  // Excercice 1
+  @GetMapping("parse")
+  public ResponseEntity<Date> getParsedDate(@RequestParam String date) {
+    return ResponseEntity.ok(Util.parseDate(date));
+  }
+
   @GetMapping(path = "feed")
-  public ResponseEntity getFeed(
+  public ResponseEntity<?> getFeed(
       @RequestParam(defaultValue = "0") int offset,
       @RequestParam(defaultValue = "20") int limit,
       @AuthenticationPrincipal User user) {
