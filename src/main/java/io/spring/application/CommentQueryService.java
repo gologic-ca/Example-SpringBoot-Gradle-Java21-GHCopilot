@@ -59,18 +59,6 @@ public class CommentQueryService {
     if (comments.isEmpty()) {
       return new CursorPager<>(new ArrayList<>(), page.getDirection(), false);
     }
-    updateFollowingStatus(user, comments);
-    boolean hasExtra = comments.size() > page.getLimit();
-    if (hasExtra) {
-      comments.remove(page.getLimit());
-    }
-    if (!page.isNext()) {
-      Collections.reverse(comments);
-    }
-    return new CursorPager<>(comments, page.getDirection(), comments.size() > page.getLimit());
-  }
-
-  private void updateFollowingStatus(User user, List<CommentData> comments) {
     if (user != null) {
       Set<String> followingAuthors =
           userRelationshipQueryService.followingAuthors(
@@ -85,5 +73,13 @@ public class CommentQueryService {
             }
           });
     }
+    boolean hasExtra = comments.size() > page.getLimit();
+    if (hasExtra) {
+      comments.remove(page.getLimit());
+    }
+    if (!page.isNext()) {
+      Collections.reverse(comments);
+    }
+    return new CursorPager<>(comments, page.getDirection(), hasExtra);
   }
 }
