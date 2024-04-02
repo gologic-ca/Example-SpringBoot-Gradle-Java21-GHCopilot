@@ -10,9 +10,9 @@ import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,8 +33,7 @@ public class ArticleApi {
   private ArticleCommandService articleCommandService;
 
   @GetMapping
-  public ResponseEntity<?> article(
-      @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
+  public ResponseEntity<?> article(@PathVariable String slug, @AuthenticationPrincipal User user) {
     return articleQueryService
         .findBySlug(slug, user)
         .map(articleData -> ResponseEntity.ok(articleResponse(articleData)))
@@ -43,7 +42,7 @@ public class ArticleApi {
 
   @PutMapping
   public ResponseEntity<?> updateArticle(
-      @PathVariable("slug") String slug,
+      @PathVariable String slug,
       @AuthenticationPrincipal User user,
       @Valid @RequestBody UpdateArticleParam updateArticleParam) {
     return articleRepository
@@ -64,7 +63,7 @@ public class ArticleApi {
 
   @DeleteMapping
   public ResponseEntity deleteArticle(
-      @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
+      @PathVariable String slug, @AuthenticationPrincipal User user) {
     return articleRepository
         .findBySlug(slug)
         .map(
@@ -79,10 +78,9 @@ public class ArticleApi {
   }
 
   private Map<String, Object> articleResponse(ArticleData articleData) {
-    return new HashMap<String, Object>() {
-      {
-        put("article", articleData);
-      }
-    };
+    Map<String, Object> response = new HashMap<>();
+    response.put("article", articleData);
+
+    return response;
   }
 }

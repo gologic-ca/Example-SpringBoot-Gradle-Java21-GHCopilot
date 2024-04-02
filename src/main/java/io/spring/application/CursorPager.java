@@ -30,11 +30,11 @@ public class CursorPager<T extends Node> {
   }
 
   public PageCursor getStartCursor() {
-    return data.isEmpty() ? null : data.get(0).getCursor();
+    return data.isEmpty() ? null : data.getFirst().getCursor();
   }
 
   public PageCursor getEndCursor() {
-    return data.isEmpty() ? null : data.get(data.size() - 1).getCursor();
+    return data.isEmpty() ? null : data.getLast().getCursor();
   }
 
   public enum Direction {

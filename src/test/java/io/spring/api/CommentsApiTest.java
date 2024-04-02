@@ -1,11 +1,22 @@
 package io.spring.api;
 
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.*;
+import static org.hamcrest.core.IsEqual.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
@@ -18,17 +29,6 @@ import io.spring.core.article.ArticleRepository;
 import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
 import io.spring.core.user.User;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(CommentsApi.class)
 @Import({WebSecurityConfig.class, JacksonCustomizations.class})
@@ -48,6 +48,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
   public void setUp() throws Exception {
     RestAssuredMockMvc.mockMvc(mvc);
     super.setUp();
+
     article = new Article("title", "desc", "body", Arrays.asList("test", "java"), user.getId());
     when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
     comment = new Comment("comment", user.getId(), article.getId());
@@ -90,8 +91,10 @@ public class CommentsApiTest extends TestWithCurrentUser {
         .body("comment.body", equalTo(commentData.getBody()));
   }
 
+  // Add missing import statements here
+
   @Test
-  public void should_get_422_with_empty_body() throws Exception {
+  void should_get_422_with_empty_body() throws Exception {
     Map<String, Object> param =
         new HashMap<String, Object>() {
           {

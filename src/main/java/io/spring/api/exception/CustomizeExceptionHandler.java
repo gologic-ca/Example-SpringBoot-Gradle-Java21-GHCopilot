@@ -1,16 +1,16 @@
 package io.spring.api.exception;
 
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+
+@Order(-1)
 @RestControllerAdvice
 public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -47,7 +51,7 @@ public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
     return handleExceptionInternal(e, error, headers, UNPROCESSABLE_ENTITY, request);
   }
 
-  @ExceptionHandler(InvalidAuthenticationException.class)
+  @ExceptionHandler({InvalidAuthenticationException.class})
   public ResponseEntity<Object> handleInvalidAuthentication(
       InvalidAuthenticationException e, WebRequest request) {
     return ResponseEntity.status(UNPROCESSABLE_ENTITY)
@@ -61,12 +65,12 @@ public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException e,
+      MethodArgumentNotValidException ex,
       HttpHeaders headers,
-      HttpStatus status,
+      HttpStatusCode status,
       WebRequest request) {
     List<FieldErrorResource> errorResources =
-        e.getBindingResult().getFieldErrors().stream()
+        ex.getBindingResult().getFieldErrors().stream()
             .map(
                 fieldError ->
                     new FieldErrorResource(
