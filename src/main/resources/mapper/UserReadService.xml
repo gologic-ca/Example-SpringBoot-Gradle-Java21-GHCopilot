@@ -4,9 +4,6 @@
     <select id="findByUsername" resultType="io.spring.application.data.UserData">
         select * from users where username = #{username}
     </select>
-    <select id="findAll" resultType="io.spring.application.data.UserData">
-        select * from users
-    </select>
     <select id="findById" resultType="io.spring.application.data.UserData">
         select * from users where id = #{id}
     </select>
