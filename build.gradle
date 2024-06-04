@@ -3,25 +3,11 @@ plugins {
     id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
     id "com.netflix.dgs.codegen" version "5.0.6"
-    id "com.diffplug.spotless" version "6.25.0"
-    id("org.openrewrite.rewrite") version("6.10.0")
 }
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '21'
 targetCompatibility = '21'
-
-spotless {
-    java {
-        target project.fileTree(project.rootDir) {
-            include '**/*.java'
-            exclude 'build/generated/**/*.*', 'build/generated-examples/**/*.*'
-        }
-        googleJavaFormat()
-    }
-}
-
-
 
 repositories {
     mavenCentral()
@@ -31,10 +17,6 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-}
-
-rewrite {
- activeRecipe("org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2")
 }
 
 dependencies {
@@ -66,7 +48,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
-    rewrite("org.openrewrite.recipe:rewrite-spring:5.7.0")
 }
 
 tasks.named('test') {
@@ -82,10 +63,4 @@ tasks.named('clean') {
 tasks.named('generateJava') {
     schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
     packageName = 'io.spring.graphql' // The package name to use to generate sources
-}
-
-tasks.named('spotlessJava') {
-    mustRunAfter tasks.named('compileJava')
-    mustRunAfter tasks.named('generateJava')
-    mustRunAfter tasks.named('processResources')
 }
