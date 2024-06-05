@@ -42,24 +42,6 @@ public class ProfileApi {
         .orElseThrow(ResourceNotFoundException::new);
   }
 
-  // // add new endpoints who retrieve all profiles and return a ResponseEntity
-  // @GetMapping("/all")
-  // public ResponseEntity getAllProfiles(@PathVariable("username") String username,
-  // @AuthenticationPrincipal User user) {
-  //   Map<String, Object> response = new HashMap<>();
-  //   response.put("profiles", profileQueryService.findAllProfiles(user));
-
-  //   return ResponseEntity.ok(response);
-  // }
-
-  /**
-   * Follows a user with the given username.
-   *
-   * @param username The username of the user to follow.
-   * @param user The authenticated user.
-   * @return The updated profile information as a ResponseEntity.
-   * @throws ResourceNotFoundException If the user to follow is not found.
-   */
   @PostMapping(path = "follow")
   public ResponseEntity follow(@PathVariable String username, @AuthenticationPrincipal User user) {
     return userRepository
@@ -73,14 +55,6 @@ public class ProfileApi {
         .orElseThrow(ResourceNotFoundException::new);
   }
 
-  /**
-   * Unfollows a user with the given username.
-   *
-   * @param username The username of the user to unfollow.
-   * @param user The authenticated user.
-   * @return The updated profile information as a ResponseEntity.
-   * @throws ResourceNotFoundException If the user to unfollow is not found.
-   */
   @DeleteMapping(path = "follow")
   public ResponseEntity unfollow(
       @PathVariable String username, @AuthenticationPrincipal User user) {
@@ -100,12 +74,6 @@ public class ProfileApi {
     }
   }
 
-  /**
-   * Creates a ResponseEntity with the profile information.
-   *
-   * @param profile The profile data.
-   * @return The ResponseEntity containing the profile information.
-   */
   private ResponseEntity profileResponse(ProfileData profile) {
     return ResponseEntity.ok(
         new HashMap<String, Object>() {
