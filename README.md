@@ -68,6 +68,8 @@ The entry point address of the backend API is at http://localhost:8080, **not** 
 
 The repository contains a lot of test cases to cover both api test and repository test.
 
+password = test123
+
     ./gradlew test
 
 # Code format
