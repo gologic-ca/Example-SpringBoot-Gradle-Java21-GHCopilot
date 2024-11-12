@@ -1,84 +1,57 @@
-# ![RealWorld Example App using Kotlin and Spring](example-logo.png)
+# ![Formation GoLogic Example de Projet](Gologic.png)
 
-[![Actions](https://github.com/gothinkster/spring-boot-realworld-example-app/workflows/Java%20CI/badge.svg)](https://github.com/gothinkster/spring-boot-realworld-example-app/actions)
+## Pré-requis pour l'exemple de projet 
 
-> ### Spring boot + MyBatis codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) spec and API.
+Nous sommes ravis d'explorer GitHub Copilot avec vous à travers des exemples pratiques. Pour assurer un bon déroulement, veuillez préparer votre poste de travail de la manière suivante :
 
-This codebase was created to demonstrate a fully fledged full-stack application built with Spring boot + Mybatis including CRUD operations, authentication, routing, pagination, and more.
+- Installer Visual Studio Code : [https://code.visualstudio.com/download](https://code.visualstudio.com/download)
 
-For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
+- Une fois que Visual Studio Code est installé sur votre système, installez le plugin SonarLint (Ouvrez VSCode, appuyez sur Ctrl+Shift+X, saisissez "SonarLint" dans la barre de recherche, puis cliquez sur "Install").
 
-# *NEW* GraphQL Support  
+- Installer le SDK Java (Version 21) : [https://www.oracle.com/ca-en/java/technologies/downloads/#java21](https://www.oracle.com/ca-en/java/technologies/downloads/#java21)
 
-Following some DDD principles. REST or GraphQL is just a kind of adapter. And the domain layer will be consistent all the time. So this repository implement GraphQL and REST at the same time.
+- Installer Gradle pour construire et démarrer le projet : [https://gradle.org/install/](https://gradle.org/install/)
 
-The GraphQL schema is https://github.com/gothinkster/spring-boot-realworld-example-app/blob/master/src/main/resources/schema/schema.graphqls and the visualization looks like below.
+## Démarrer l'application
 
-![](graphql-schema.png)
+- Ouvrez VSCode et ouvrez une nouvelle fenêtre (Ctrl+Shift+N).
 
-And this implementation is using [dgs-framework](https://github.com/Netflix/dgs-framework) which is a quite new java graphql server framework.
-# How it works
+- Sur la page d'accueil, cliquez sur "Clone Git Repository...", entrez l'URL de ce dépôt [https://github.com/gologic-ca/Example-SpringBoot-Gradle-Java21-GHCopilot.git](https://github.com/gologic-ca/Example-SpringBoot-Gradle-Java21-GHCopilot.git)) et confirmez en cliquant sur "Clone from the URL". Cliquez ensuite sur "Open".
 
-The application uses Spring Boot (Web, Mybatis).
+- Une fois le projet ouvert, ouvrez un nouveau terminal (Shift+Ctrl+\`). Exécuter la commande :
+`./gradlew bootRun`
 
-* Use the idea of Domain Driven Design to separate the business term and infrastructure term.
-* Use MyBatis to implement the [Data Mapper](https://martinfowler.com/eaaCatalog/dataMapper.html) pattern for persistence.
-* Use [CQRS](https://martinfowler.com/bliki/CQRS.html) pattern to separate the read model and write model.
+Félicitations, le projet devrait maintenant être en cours d'exécution sur `http://localhost:8080/`.
+Ajoutez une requête à la fin de l'URL pour voir les résultats. Par exemple : `http://localhost:8080/tags`
 
-And the code is organized as this:
 
-1. `api` is the web layer implemented by Spring MVC
-2. `core` is the business model including entities and services
-3. `application` is the high-level services for querying the data transfer objects
-4. `infrastructure`  contains all the implementation classes as the technique details
+# Fonctionnement
 
-# Security
+L'application utilise Spring Boot (Web, MyBatis).
 
-Integration with Spring Security and add other filter for jwt token process.
+Le code est organisé de la manière suivante :
 
-The secret key is stored in `application.properties`.
+1. `api` est la couche web implémentée par Spring MVC
+2. `core` représente le modèle métier, comprenant les entités et les services
+3. `application` fournit les services de haut niveau pour interroger les objets de transfert de données
+4. `infrastructure` contient toutes les classes d'implémentation en tant que détails techniques
 
-# Database
+# Sécurité
 
-It uses a ~~H2 in-memory database~~ sqlite database (for easy local test without losing test data after every restart), can be changed easily in the `application.properties` for any other database.
+Il y a une intégration avec Spring Security et l'ajout d'un autre filtre pour le traitement des jetons JWT.
 
-# Getting started
+La clé secrète est stockée dans `application.properties`.
 
-You'll need Java 21 installed.
+# Base de données
 
-    ./gradlew bootRun
+On utilise une base de données SQLite (pour faciliter les tests locaux sans perdre les données de test après chaque redémarrage), qui peut être facilement modifiée dans `application.properties` pour toute autre base de données.
 
-To test that it works, open a browser tab at http://localhost:8080/tags .  
-Alternatively, you can run
+## [Source et documentation](https://github.com/gothinkster/realworld)
 
-    curl http://localhost:8080/tags
+La base de code contient des exemples concrets (CRUD, authentification, modèles avancés, etc.) qui respectent la spécification et l'API [RealWorld](https://github.com/gothinkster/realworld-example-apps).
 
-# Try it out with [Docker](https://www.docker.com/)
+Cette base de code a été créée pour montrer une application full-stack complète construite avec Java Spring (avec une orientation fonctionnalité) incluant des opérations CRUD, de l'authentification, du routage, de la pagination, et plus encore.
 
-You'll need Docker installed.
-	
-    ./gradlew bootBuildImage --imageName spring-boot-realworld-example-app
-    docker run -p 8081:8080 spring-boot-realworld-example-app
+Pour plus d'informations sur le fonctionnement avec d'autres frontends/backends, rendez-vous sur le dépôt [RealWorld](https://github.com/gothinkster/realworld).
 
-# Try it out with a RealWorld frontend
-
-The entry point address of the backend API is at http://localhost:8080, **not** http://localhost:8080/api as some of the frontend documentation suggests.
-
-# Run test
-
-The repository contains a lot of test cases to cover both api test and repository test.
-
-password = test123
-
-    ./gradlew test
-
-# Code format
-
-Use spotless for code format.
-
-    ./gradlew spotlessJavaApply
-
-# Help
-
-Please fork and PR to improve the project.
 
