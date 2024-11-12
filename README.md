@@ -25,7 +25,7 @@ Félicitations, le projet devrait maintenant être en cours d'exécution sur `ht
 Ajoutez une requête à la fin de l'URL pour voir les résultats. Par exemple : `http://localhost:8080/tags`
 
 
-# Fonctionnement
+## Fonctionnement
 
 L'application utilise Spring Boot (Web, MyBatis).
 
@@ -36,13 +36,13 @@ Le code est organisé de la manière suivante :
 3. `application` fournit les services de haut niveau pour interroger les objets de transfert de données
 4. `infrastructure` contient toutes les classes d'implémentation en tant que détails techniques
 
-# Sécurité
+## Sécurité
 
 Il y a une intégration avec Spring Security et l'ajout d'un autre filtre pour le traitement des jetons JWT.
 
 La clé secrète est stockée dans `application.properties`.
 
-# Base de données
+## Base de données
 
 On utilise une base de données SQLite (pour faciliter les tests locaux sans perdre les données de test après chaque redémarrage), qui peut être facilement modifiée dans `application.properties` pour toute autre base de données.
 
