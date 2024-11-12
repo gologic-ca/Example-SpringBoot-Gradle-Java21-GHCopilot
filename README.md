@@ -12,6 +12,9 @@ Nous sommes ravis d'explorer GitHub Copilot avec vous à travers des exemples pr
 
 - Installer Gradle pour construire et démarrer le projet : [https://gradle.org/install/](https://gradle.org/install/)
 
+- (OPTIONNEL) Installer Postman pour faciliter les requêtes au backend : [https://www.postman.com/downloads/](https://www.postman.com/downloads/)
+
+
 ## Démarrer l'application
 
 - Ouvrez VSCode et ouvrez une nouvelle fenêtre (Ctrl+Shift+N).
